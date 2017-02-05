@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="container-fluid" style="padding-top:25px;">
+    
+    <h3 class="post-title" style="margin-top:0px;">{{ selected_user.username }}'s {{ source }}</h3>
+  
+    {% if user_list|length == 0 %}
+      <div class="container-fluid text-center">
+          <hr>
+          <p>No users, huh...</p>
+      </div>
+    
+    {% else %}
+    
+      {% for user in user_list %}
+      <div name="user_{{user.username}}" id="{{user.id}}"  class="bs-callout bs-callout-danger col-xs-12">
+        <div class="row">
+          
+          <div class="col-xs-1">
+            <img id="avatar" class="img-circle img-responsive" style="width:50px;" alt="" src="{{ url_for('uploads', filename=user.img_path) }}" />
+          </div>
+          
+          <div class="col-xs-10">
+            <h4 style="display:inline;"><a class="post-link" href="{{url_for('profile', username=user.username) }}">{{ user.username }}</a>&nbsp;</h4>
+          </div>
+          
+          <div class="col-xs-1 text-right">
+            <span class="badge" style="vertical-align:middle;background-color:#09B1EE;">{{ user.num_posts() }}</span>
+            
+            {% if currentuser!=None and currentuser!=user %}
+                <span> | </span>
+                {% if not currentuser.is_following(user) %}
+                      <a class="settings" style="vertical-align:middle;" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty"></span></a>
+                {% else %}
+                      <a class="settings" style="vertical-align:middle;" href="{{ url_for('unfollow',followed_id=user.id) }}"><span class="glyphicon glyphicon-heart"></span></a>
+                {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}

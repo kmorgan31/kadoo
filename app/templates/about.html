@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container-fluid">
+  <h2 class="post-title">About</h2>
+  
+  <hr>
+  
+  <div class="about-tagline text-center">
+    Foodie Bliss was born out of a need for Flask practice and a love of food.</div>
+  </div>
+  
+  <br>
+  
+  <div class="polaroid-display">
+      <div class="polaroid tilt-left">
+        <img src="https://i.ytimg.com/vi/dsJtgmAhFF4/maxresdefault.jpg">
+        <p>Chocolate Cake</p>
+      </div>
+
+      <div class="polaroid tilt-right">
+        <img src="https://www.cscassets.com/recipes/large_cknew/large_62233.jpg">
+        <p>Chicken Alfredo</p>
+      </div>
+
+      <div class="polaroid tilt-left">
+        <img src="http://www.rd.com/wp-content/uploads/2014/02/08-grape-nut-stuffed-pepper-fsl.jpg">
+        <p>Stuffed Peppers</p>
+      </div>
+  </div>
+    
+  <div class="about-features-card">
+    <h3 class="post-link">What can you do?</h3>
+    <br>
+    <ul class="desc">
+      <li class="col-xs-3"><span>Make your own posts of your favourite recipes</span></li>
+      <li class="col-xs-3"><span>Follow other chefs to see what they're cooking</span></li>
+      <li class="col-xs-3"><span>Comment on their choice of ingredients and techniques</span></li>
+      <li class="col-xs-3"><span>See what recipes are hot and trending</span></li>
+    </ul>
+  </div>
+  
+  <br>
+  <hr>
+  
+  <div id="technologies_list">
+    <div class="col-xs-6 about-tech-card" >
+      <h3 class="post-link">Technologies used</h3>
+      <ul class="desc list-unstyled">
+        <li>Python - Flask</li>
+        <li>SQLAlchemy</li>
+        <li>PostgreSQL</li>
+        <li>JQuery</li>
+        <li>Bootstrap</li>
+        <li>Jinja2</li>
+        <li>HTML/CSS</li>
+        <li>JavaScript</li>
+      </ul>
+    </div>
+    
+    <div class="col-xs-6">
+      <img class="tech-logos" src="https://www.python.org/static/opengraph-icon-200x200.png">
+      <img class="tech-logos" src="http://flask.pocoo.org/docs/0.11/_static/flask.png">
+      <img class="tech-logos" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Pg_logo.png">
+      <img class="tech-logos" src="http://seeklogo.com/images/B/bootstrap-logo-3C30FB2A16-seeklogo.com.png">
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block main %}
+<div class="container-fluid">
+    <div class="card hovercard">
+        <div class="cardheader">
+
+        </div>
+
+        <div class="col-sm-2">
+            <div class="avatar center-block">
+                <img class="img-circle img-responsive" alt="" src="{{ url_for('uploads', filename=user.img_path) }}" />
+            </div>
+            
+            <div class="bottom center-block">
+                {% if user.twitter_url!="" %}
+                <a class="btn btn-primary btn-twitter btn-sm social-btns" href="{{user.twitter_url}}" target="_blank">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                {% endif %}
+                
+                {% if user.gplus_url!="" %}
+                <a class="btn btn-danger btn-sm social-btns" href="{{user.gplus_url}}" target="_blank">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+                {% endif %}
+                
+                {% if user.fbk_url!="" %}
+                <a class="btn btn-primary btn-sm social-btns" href="{{user.fbk_url}}" target="_blank">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="info col-sm-8">
+            <div class="title">{{user.username}}</div>
+            <div class="desc" style="min-height:70px;">{{user.bio|safe}}</div>
+        </div>
+        
+        <div class="col-sm-2 settings">
+            <p>
+                <a class="settings" href="{{ url_for('get_profile_followers', username=user.username) }}"><span id="num_followers">{{ user.followers.count() }} follower{% if user.followers.count() != 1 %}s{% endif %}</span></a> |
+                <a class="settings" href="{{ url_for('get_profile_following', username=user.username) }}"><span>{{ user.num_followers() }} following</span></a>
+            
+                {% if currentuser!=None %}
+                    <span> | </span>
+                    {% if user.id == session['userid'] %}
+                        <a class="settings" href="{{url_for('settings') }}"><span class="glyphicon glyphicon-cog"></span></a>
+                    
+                    {% else %}
+                        {% if not currentuser.is_following(user) %}
+                               <!--| <a class="settings" href="{{ url_for('follow', followed_id=user.id) }}"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>-->
+                               <a class="settings" id="follow_link" onClick="follow({{user.id}})"><span class="glyphicon glyphicon-heart-empty" style="color:#737373;"></span></a>
+                               
+                        {% else %}
+                               <!--| <a class="settings" href="{{ url_for('unfollow',followed_id=user.id) }}" onClick="unfollow({{user.id}})"><span class="glyphicon glyphicon-heart"></span></a>-->
+                               <a class="settings" id="follow_link" onClick="unfollow({{user.id}})"><span class="glyphicon glyphicon-heart"></span></a>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    
+    <br>
+    
+    <div id="tabs" class="content_box">
+        <ul class="nav nav-tabs">
+          <li><a class="post-title" data-toggle="tab" href="#profile_post_box">Posts</a></li>
+          <li><a class="post-title" data-toggle="tab" href="#profile_comment_box">Comments</a></li>
+          {% if user.id == session['userid'] %}
+          <li><a class="post-title" data-toggle="tab" href="#profile_favourites_box">Favourites</a></li>
+          {% endif %}
+        </ul>
+        
+        <div class="tab-content" style="padding-top:15px;">
+            <div id="profile_post_box" class="container-fluid post_list tab-pane fade in active" style="padding-top:15px;">
+                {% include 'postlist.html' %}
+            </div>
+
+            <!--<div id="profile_comment_box" class="container-fluid post_list tab-pane fade">-->
+            <!--    {% include 'commentprofilelist.html' %}-->
+            <!--</div>-->
+            
+            <div id="profile_favourites_box" class="container-fluid post_list tab-pane fade">
+                {% include 'favouriteslist.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var follow = function(user_id) {
+         $.ajax({
+          type: "GET",
+          url: "/follow/"+user_id.toString(),
+          success: function(data){
+              $("#follow_link span").attr("class", "glyphicon glyphicon-heart")
+                                    .attr("style", "color:#EB008A;");
+              $("#follow_link").attr("onClick", "unfollow("+user_id.toString()+")");
+              
+              var followers_heading = data + " follower";
+              if(data != "1"){
+                  followers_heading = followers_heading +"s";
+              }
+
+              $("#num_followers").html(followers_heading);
+          }
+        })
+    };
+    
+    var unfollow = function(user_id) {
+         $.ajax({
+          type: "GET",
+          url: "/unfollow/"+user_id.toString(),
+          success: function(data){
+              $("#follow_link span").attr("class", "glyphicon glyphicon-heart-empty")
+                                    .attr("style", "color:#737373;");
+              $("#follow_link").attr("onClick", "follow("+user_id.toString()+")");
+              
+              var followers_heading = data + " follower";
+              if(data != "1"){
+                  followers_heading = followers_heading +"s";
+              }
+
+              $("#num_followers").html(followers_heading);
+          }
+        })
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+# ----------------------
+# Flask
+# ----------------------
+flask
+Flask-SQLAlchemy
+Flask-Migrate
+psycopg2
+
+# ----------------------
+# Testing
+# ----------------------
+mock
+
+# ----------------------
+# Production Server
+# ----------------------
+gunicorn
+
+# ----------------------
+# DateTime
+# ----------------------
+pytz
+tzlocal

@@ -1,0 +1,49 @@
+<nav class="sidenav navbar-default">
+
+    <ul class="nav nav-pils nav-stacked">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-list"></span> Categories<span class="caret"></a>
+            <ul class="dropdown-menu">
+              {% for tag in tag_list %}
+                <li><a id="{{ tag.name }}" class="filter-by">{{ tag.name }}</a></li>
+              {% endfor %}
+            </ul>
+        </li>
+
+        <!--<li><a id="Hot" class="filter-by"><span class="glyphicon glyphicon-fire"></span> Hot</a></li>-->
+        <!--<li><a id="Trending" class="filter-by"><span class="glyphicon glyphicon-star"></span> Trending</a></li>-->
+        <!--<li><a id="Recent" class="filter-by"><span class="glyphicon glyphicon-time"></span> Recent</a></li>-->
+        
+        {% if currentuser!=None %}
+            <li><a id="Bookmarked" class="filter-by"><span class="glyphicon glyphicon-bookmark"></span> Bookmarked</a></li>
+            <li><a id="Subscribed" class="filter-by"><span class="glyphicon glyphicon-eye-open"></span> Subscribed</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% if currentuser!=None %}
+    <div class="post_box text-left">
+        <hr>
+        
+        <h4 class="post-title">Subscribed</h4>
+        <div class="post_list">
+            {% include 'subscribedgridview.html' %}
+        </div>
+    </div>
+{% endif %}
+
+
+<script>
+  $('.filter-by').on("click", function(){
+      var filter = $(this).attr('id');
+
+      $.ajax({
+       type: "GET",
+       url: "/",
+       data: {"filter_by": filter},
+       success: function(data){
+           $("#post_list").html(data.result);
+       }
+    })
+  });
+</script>

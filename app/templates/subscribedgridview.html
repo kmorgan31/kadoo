@@ -1,0 +1,15 @@
+<div class="infinite-scroll">
+  {% if user_list|length == 0 %}
+    <div class="container-fluid text-center">
+      <p>No users, huh...</p>
+    </div>
+  
+  {% else %}
+  
+    {% for user in user_list %}
+    <div name="user_{{user.username}}" id="{{user.id}}" class="col-xs-4" style="display:inline;">
+        <a href="{{url_for('profile', username=user.username) }}"><img id="avatar" class="img-circle img-responsive" style="width:60px;" title="{{user.username}}" src="{{ url_for('uploads', filename=user.img_path) }}" /></a>
+    </div>
+    {% endfor %}
+  {% endif %}
+</div>

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container-fluid" style="padding-top:25px;">
+    <div class="col-xs-8">
+        
+      <h3 class="post-title" style="display:inline;">{{post[0].title}}&nbsp;</h3>
+      
+      {% if session['username'] != post[1].username %}
+        <span class="desc">by <a class="post-author-link" href="{{url_for('profile', username=post[1].username) }}">{{post[1].username}}</a></span>
+      {% endif %}
+    </div>
+
+    <div class="col-xs-4 text-right">
+      <span class="desc">{{ post[0].created_at|local }}</span>
+      
+      {% if session['username'] == post[1].username %}
+          <span class="post-buttons">
+            <a class="post-link" href="{{url_for('edit_post', postid=post[0].id) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="post-link" data-toggle="modal" data-target="#delete_confirm_modal"><span class="glyphicon glyphicon-remove"></span></a>
+          </span>
+      {% endif %}
+    </div>
+    
+    <div class="col-sm-12">
+        {% for tag in post[0].get_post_tags() %}
+            <span class="label label-primary">{{ tag.name }}</span>
+        {% endfor %}
+        
+        <span class="pull-right">
+            {% if currentuser!=None %}
+                {% if not post[0].has_favourited(currentuser) %}
+                    <a class="settings" id="favourite_link" onClick="favourite({{post[0].id}})" style="vertical-align:middle;"><span class="glyphicon glyphicon-bookmark" style="color:#737373;"></span></a>
+                {% else %}
+                    <a class="settings" id="favourite_link" onClick="unfavourite({{post[0].id}})" style="vertical-align:middle;"><span class="glyphicon glyphicon-bookmark"></span></a>
+                {% endif %}
+            {% endif %}
+                      
+           <span class="badge" style="vertical-align:middle;background-color:#EB008A;" id="num_favourites">{{ post[0].num_favourites() }}</span>
+       </span>
+    </div>
+
+    <div class="col-sm-12" style="padding-top:15px;">
+       {{post[0].content|safe}}
+    </div>
+</div>
+
+<div class="modal fade" id="delete_confirm_modal" tabindex="-1" style="padding-top:100px;">
+      <div class="modal-dialog text-center modal-sm">
+          <div class="modal-content ">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Delete? Really?</h4>
+              </div>
+              <div class="modal-body">
+                  <form id="delete_post_form" method="post" action="/delete_post" class="form" data-toggle="validator" role="form">
+                      <div class="form-group col-xs-12">
+                          <span>Are you sure you wanna do that?</span>
+                      </div>
+          
+                      <input type="hidden" name="post_id" value="{{post[0].id}}" />
+          
+                      <div class="btn-toolbar" style="padding:15px 55px;">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<script>
+    var favourite = function(post_id) {
+         $.ajax({
+          type: "GET",
+          url: "/favourite/"+post_id.toString(),
+          success: function(data){
+              $("#favourite_link span").attr("style", "color:#17388A;");
+              $("#favourite_link").attr("onClick", "unfavourite("+post_id.toString()+")");
+              $("#num_favourites").html(data);
+          }
+        })
+    };
+    
+    var unfavourite = function(post_id) {
+         $.ajax({
+          type: "GET",
+          url: "/unfavourite/"+post_id.toString(),
+          success: function(data){
+              $("#favourite_link span").attr("style", "color:#737373;");
+              $("#favourite_link").attr("onClick", "favourite("+post_id.toString()+")");
+              $("#num_favourites").html(data);
+          }
+        })
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container-fluid">
+  <h2 class="post-title">About</h2>
+  
+  <hr>
+  
+  <div class="about-tagline text-center">
+    Foodie Bliss was born out of a need for Flask practice and a love of food.</div>
+  </div>
+  
+  <br>
+  
+  <div class="row col-xs-12" id="features" style="padding:60px 0px;">
+    <div class="col-xs-5 col-xs-offset-1 pull-right about-card tilt--right" style="margin-top:20px;">
+      <h3 class="post-link">Features</h3>
+      <ul class="desc list-unstyled">
+        <li>Make your own posts of your favourite recipes</li>
+        <li>Follow other chefs to see what they're cooking</li>
+        <li>Comment on their choice of ingredients and techniques</li>
+        <li>See what recipes are hot and trending</li>
+      </ul>
+    </div>
+    
+    <div class="col-xs-5 pull-right">
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+      
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+          <div class="item active about-carousel">
+            <img src="https://i.ytimg.com/vi/dsJtgmAhFF4/maxresdefault.jpg">
+          </div>
+      
+          <div class="item about-carousel">
+            <img src="https://www.cscassets.com/recipes/large_cknew/large_62233.jpg">
+          </div>
+      
+          <div class="item about-carousel">
+            <img src="http://www.rd.com/wp-content/uploads/2014/02/08-grape-nut-stuffed-pepper-fsl.jpg">
+          </div>
+        </div>
+      
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row col-xs-12" id="technologies" style="padding:60px 0px;">
+    <div class="col-xs-5 col-xs-offset-1 about-card tilt-left">
+      <h3 class="post-link">Technologies used</h3>
+      <ul class="desc list-unstyled">
+        <li>Python - Flask</li>
+        <li>SQLAlchemy</li>
+        <li>PostgreSQL</li>
+        <li>JQuery</li>
+        <li>Bootstrap</li>
+        <li>Jinja2</li>
+        <li>HTML/CSS</li>
+        <li>JavaScript - Ajax requests</li>
+      </ul>
+    </div>
+    
+    <div class="col-xs-4 col-xs-offset-1">
+      <img class="tech-logos" src="https://www.python.org/static/opengraph-icon-200x200.png">
+      <img class="tech-logos" src="http://flask.pocoo.org/docs/0.11/_static/flask.png">
+      <img class="tech-logos" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Pg_logo.png">
+      <img class="tech-logos" src="http://seeklogo.com/images/B/bootstrap-logo-3C30FB2A16-seeklogo.com.png">
+    </div>
+  </div>
+</div>
+
+{% endblock %}

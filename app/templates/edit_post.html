@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div class="container-fluid">
+
+    <h3 class="post-title">Edit Post</h3>
+    <hr>
+    
+    <form id="edit_post_form" method="post" action="/edit_post" class="form" data-toggle="validator" role="form" data-disable="false">
+
+        <div class="form-group col-xs-12">
+            <label for="Title">Title</label>
+            <input id="title" name="title" class="form-control" type="text" placeholder="Title" value="{{post.title}}" data-error="Bruh, you need a title." required/>
+            <div class="help-block with-errors"></div>
+        </div>
+        
+        <div class="form-group col-xs-12 bs-docs-example">
+            <label for="Categories">Categories</label>
+            <select name="tag_dropdown" class="form-control selectpicker" multiple>
+            {% for tag in tag_list %}  
+                <option value="{{ tag.name }}">{{ tag.name }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group col-xs-12">
+            <textarea id="content" name="content" placeholder=" Write what's on your mind..." class="form-control" rows="5" style="resize:vertical;" data-error="Bruh, you need some content." required>{{post.content}}</textarea>
+            <div class="help-block with-errors"></div>
+        </div>
+        
+        <input type="hidden" name="post_id" value="{{post.id}}" />
+        
+        <div class="form-group" style="padding-top:20px;">
+            <button type="submit" class="btn btn-default text-center center-block">Post</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $('.selectpicker').selectpicker('val', {{ selected_tag_names|safe }} );
+</script>
+
+{% endblock %}
