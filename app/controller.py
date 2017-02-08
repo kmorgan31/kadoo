@@ -134,17 +134,21 @@ def delete_post():
     return redirect(session['path'])
 
 
-@app.route('/add_post', methods=['POST'])
+@app.route('/add_post', methods=['GET','POST'])
 def add_post():
     currentuser = get_currentuser()
     category_list = get_categories()
     # set_session_path("/add_post")
 
-    category_id = request.form['category_dropdown']
-    post= Post(request.form['title'], request.form['description'], category_id, float(request.form['cost']), currentuser.id) #create Recipe object from html fields
-    db.session.add(post) #add to database
-    db.session.commit() #save database
-    return redirect(session['path'])
+    if request.method == 'POST':
+        category_id = request.form['category_dropdown']
+        post= Post(request.form['title'], request.form['description'], category_id, float(request.form['cost']), currentuser.id) #create Recipe object from html fields
+        db.session.add(post) #add to database
+        db.session.commit() #save database
+        return redirect(session['path'])
+
+    else:
+        return render_template("add_post.html", currentuser=currentuser, category_list=category_list) #generates html based on template
 
 
 @app.route('/edit_post', methods=['GET','POST']) #POST
@@ -160,9 +164,10 @@ def edit_post(postid=None):
     
     if request.method == 'POST':
         post.title = request.form['title']
-        post.content = request.form['content']
+        post.description = request.form['description']
         category_id = request.form['category_dropdown']
-        
+        post.cost = float(request.form['cost'])
+
         db.session.commit() #save database
         return redirect(session['path'])
     else:

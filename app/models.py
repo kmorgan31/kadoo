@@ -22,7 +22,7 @@ class Post(db.Model):
     description = db.Column(db.String(1000))
     category_id = db.Column(db.Integer, db.ForeignKey("Category.id"))
     cost = db.Column(db.Float)
-    #img_path = db.Column(db.String(500)) - array of img paths
+    #img_paths = db.Column(db.String(500)) - array of img paths
     
     created_by = db.Column(db.Integer, db.ForeignKey("User.id"))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
