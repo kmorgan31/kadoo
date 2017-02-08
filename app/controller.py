@@ -87,7 +87,14 @@ def signup():
             return render_template("login.html", currentuser=currentuser, category_list=category_list, error="Username already exists") #generates html based on template
             
         else:
-            user = User(request.form['username'], request.form['email'], request.form['password']) #create User object from html fields
+            # Automatically geolocate the connecting IP
+            f = urllib2.urlopen('http://freegeoip.net/json/')
+            json_string = f.read()
+            f.close()
+            
+            location = json.loads(json_string)
+
+            user = User(request.form['username'], request.form['email'], request.form['password'], location['city'], location['region_name'], location['country_name']) #create User object from html fields
             db.session.add(user) #add to database
             db.session.commit() #save database
             
@@ -142,7 +149,7 @@ def add_post():
 
     if request.method == 'POST':
         category_id = request.form['category_dropdown']
-        post= Post(request.form['title'], request.form['description'], category_id, float(request.form['cost']), currentuser.id) #create Recipe object from html fields
+        post= Post(request.form['title'], request.form['description'], category_id, float(request.form['cost']), request.form['city'], request.form['region'], request.form['country'],currentuser.id) #create Recipe object from html fields
         db.session.add(post) #add to database
         db.session.commit() #save database
         return redirect(session['path'])
@@ -220,11 +227,11 @@ def bookmark(postid):
     post = db.session.query(Post).filter_by(id=int(postid)).first()
     
     # append follow
-    u = user.bookmark(post)
+    u = currentuser.bookmark(post)
 
     db.session.add(u)
     db.session.commit()
-    return str(user.num_bookmarks())
+    return str(currentuser.num_bookmarks())
 
 @app.route('/unbookmark/<postid>')
 def unbookmark(postid):
@@ -235,11 +242,11 @@ def unbookmark(postid):
     # load post to favourite
     post = db.session.query(Post).filter_by(id=int(postid)).first()
 
-    u = user.unbookmark(post)
+    u = currentuser.unbookmark(post)
 
     db.session.add(u)
     db.session.commit()
-    return str(user.num_bookmarks())
+    return str(currentuser.num_bookmarks())
 
 @app.route('/profile/<username>/following')
 def get_profile_following(username):
@@ -285,10 +292,9 @@ def profile(username):
     post_list = db.session.query(Post, User).filter_by(created_by=user.id).join(User).filter(Post.created_by==User.id).order_by(Post.created_at.desc()).all()
 
     #get bookmarked posts by selected user
-    
     bookmarks_list = db.session.query(Post, User).join(User).filter(Post.created_by==User.id).join(bookmarks_relationship, (bookmarks_relationship.c.post_id == Post.id)).filter(bookmarks_relationship.c.user_id == user.id).order_by(Post.created_at.desc()).all()
 
-    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, comment_list=comment_list, favourites_list=favourites_list, category_list=category_list) #generates html based on template
+    return render_template("profile.html", currentuser=currentuser, user=user, post_list=post_list, bookmarks_list=bookmarks_list, category_list=category_list) #generates html based on template
 
 @app.route('/follow/<followed_id>')
 def follow(followed_id):

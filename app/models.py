@@ -22,17 +22,23 @@ class Post(db.Model):
     description = db.Column(db.String(1000))
     category_id = db.Column(db.Integer, db.ForeignKey("Category.id"))
     cost = db.Column(db.Float)
+    region = db.Column(db.String(250))
+    country = db.Column(db.String(250))
+    city = db.Column(db.String(250))
     #img_paths = db.Column(db.String(500)) - array of img paths
     
     created_by = db.Column(db.Integer, db.ForeignKey("User.id"))
     created_at = db.Column(db.DateTime(timezone=True), default=datetime.datetime.utcnow)
     
     #Init
-    def __init__(self,title,description, category_id,cost,user_id):
+    def __init__(self,title,description, category_id,cost,city,region,country,user_id):
         self.title = title
         self.description = description
         self.category_id = category_id
         self.cost = cost
+        self.city = city
+        self.region = region
+        self.country = country
         self.created_by = user_id
 
 
@@ -50,7 +56,9 @@ class User(db.Model):
     password = db.Column(db.String(10))
     
     bio = db.Column(db.String(500))
-    location = db.Column(db.String(250))
+    city = db.Column(db.String(250))
+    region = db.Column(db.String(250))
+    country = db.Column(db.String(250))
     img_path = db.Column(db.String(500))
     twitter_url = db.Column(db.String(200))
     gplus_url = db.Column(db.String(200))
@@ -75,12 +83,16 @@ class User(db.Model):
         self.twitter_url = ""
         self.gplus_url = ""
         self.fbk_url = ""
-        self.location = location
+        self.city = city
+        self.region = region
+        self.country = country
 
     
     def __repr__(self):
         return "User " + self.username
     
+    def get_location(self):
+        return self.city + ", " + self.region + ", " + self.country
     
     #Following
     def follow(self, user):
