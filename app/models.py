@@ -25,6 +25,7 @@ class Post(db.Model):
     region = db.Column(db.String(250))
     country = db.Column(db.String(250))
     city = db.Column(db.String(250))
+    img_paths = db.Column(db.ARRAY(db.String(250)))
     #img_paths = db.Column(db.String(500)) - array of img paths
     
     created_by = db.Column(db.Integer, db.ForeignKey("User.id"))

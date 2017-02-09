@@ -1,7 +1,10 @@
 from app import app, db
 from app.models import Post, User, Category, followers, bookmarks_relationship
 
+#general imports
 import os
+import urllib2
+import json
 
 #date imports
 import pytz
@@ -33,7 +36,19 @@ def index():
         elif(filter_by=="Bookmarked"):
             q = q.join(bookmarks_relationship, (bookmarks_relationship.c.post_id == Post.id)).filter(bookmarks_relationship.c.user_id == currentuser.id)
             # q = q.filter(Post.bookmarks.any(User.id == currentuser.id))
+       
+        elif(filter_by=="Near Me City"):
+            q = q.filter(Post.city == currentuser.city, Post.region == currentuser.region, Post.country == currentuser.country)
+            filter_by = "in " + currentuser.city
+        
+        elif(filter_by=="Near Me Region"):
+            q = q.filter(Post.region == currentuser.region, Post.country == currentuser.country)
+            filter_by = "in " + currentuser.region
             
+        elif(filter_by=="Near Me Country"):
+            q = q.filter(Post.country == currentuser.country)
+            filter_by = "in " + currentuser.country
+
         # elif(filter_by=="Hot"):
         #     q = q.join(favourites_relationship, (favourites_relationship.c.post_id == Post.id)).filter(favourites_relationship.count()>100)
         #     # q = q.filter(Post.favourites.any(count()>0))
@@ -149,7 +164,7 @@ def add_post():
 
     if request.method == 'POST':
         category_id = request.form['category_dropdown']
-        post= Post(request.form['title'], request.form['description'], category_id, float(request.form['cost']), request.form['city'], request.form['region'], request.form['country'],currentuser.id) #create Recipe object from html fields
+        post= Post(request.form['title'], request.form['description'], category_id, float(request.form['cost']), currentuser.city, currentuser.region, currentuser.country, currentuser.id) #create Recipe object from html fields
         db.session.add(post) #add to database
         db.session.commit() #save database
         return redirect(session['path'])
@@ -172,7 +187,7 @@ def edit_post(postid=None):
     if request.method == 'POST':
         post.title = request.form['title']
         post.description = request.form['description']
-        category_id = request.form['category_dropdown']
+        post.category_id = request.form['category_dropdown']
         post.cost = float(request.form['cost'])
 
         db.session.commit() #save database

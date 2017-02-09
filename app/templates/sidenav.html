@@ -15,7 +15,14 @@
         <!--<li><a id="Recent" class="filter-by"><span class="glyphicon glyphicon-time"></span> Recent</a></li>-->
         
         {% if currentuser!=None %}
-            <li><a id="Near Me" class="filter-by"><span class="glyphicon glyphicon map-marker"></span> Near Me</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-map-marker"></span> Near Me<span class="caret"></a>
+                <ul class="dropdown-menu">
+                    <li><a id="Near Me City" class="filter-by">in <span style="color:#BFD72E;">{{ currentuser.city }}</span></a></li>
+                    <li><a id="Near Me Region" class="filter-by">in <span style="color:#BFD72E;">{{ currentuser.region }}</span></a></li>
+                    <li><a id="Near Me Country" class="filter-by">in <span style="color:#BFD72E;">{{ currentuser.country }}</span></a></li>
+                </ul>
+            </li>
             <li><a id="Bookmarked" class="filter-by"><span class="glyphicon glyphicon-bookmark"></span> Bookmarked</a></li>
             <li><a id="Subscribed" class="filter-by"><span class="glyphicon glyphicon-eye-open"></span> Subscribed</a></li>
         {% endif %}

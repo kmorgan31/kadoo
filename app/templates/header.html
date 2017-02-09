@@ -32,7 +32,7 @@
                 {% if currentuser!=None %}
                     <li><a href="{{url_for('profile', username=currentuser.username) }}">{{ currentuser.username }}</a></li>
 <!--                     <li><a data-toggle="modal" data-target="#post_modal"><span class="glyphicon glyphicon-plus-sign"></span></a></li> -->
-                    <li><a href="{{url_for('add_post') }}"><span class="glyphicon glyphicon-plus-sign"></span> Logout</a></li>
+                    <li><a href="{{url_for('add_post') }}"><span class="glyphicon glyphicon-plus-sign"></span></a></li>
                     <li><a href="{{url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 {% else %}
                     <li><a href="{{url_for('signup') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
