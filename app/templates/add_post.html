@@ -29,6 +29,27 @@
             <input id="cost" name="cost" class="form-control" type="text" placeholder="Cost" data-error="Is it free?" required/>
             <div class="help-block with-errors"></div>
         </div>
+
+        <div class="form-group col-xs-12">
+            <label for="Pictures" style="display:block;">Images</label>
+            
+            <span style="margin:auto;">
+                <label class="btn btn-default btn-file center-block col-xs-2" style="width:40px;"><span class="glyphicon glyphicon-camera"></span>
+                {% for x in range(0,5) %}
+                    <input id="imgInp_{{x}}" class="imgInp" type="file" name="file" style="display: none;">
+                {% endfor %}
+                </label>
+
+                {% for x in range(0,5) %}
+                    <span class="col-xs-2">
+                        <img id="img_{{x}}" class="post-images" alt="" src="http://oceancouncil.org/wp-content/themes/maxcanvas_child/img/placeholder.png" />
+                        <!-- <a id="img_clear_{{x}}" onClick="clear({{x}})" style="visibility: hidden;text-align:center;">
+                            <span class="glyphicon glyphicon-remove" style="color:#17388A;"></span>
+                        </a> -->
+                    </span>
+                {% endfor %}
+            </span>
+        </div>
         
         <div class="form-group col-xs-12">
             <textarea id="description" name="description" placeholder=" What are you selling?" class="form-control" rows="5" style="resize:vertical;" data-error="Bruh, you need to tell people what you're selling." required></textarea>
@@ -40,6 +61,36 @@
         </div>
     </form>
 </div>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+    
+            reader.onload = function (e) {
+                for (i=0;i<5;i++){
+                    if($('#img_'+i).attr('src') == "http://oceancouncil.org/wp-content/themes/maxcanvas_child/img/placeholder.png" ) {
+                        $('#img_'+i).attr('src', e.target.result);
+                        $('#img_clear_'+i).attr("style", "visibility: visible;");
+                        break;
+                    }
+                }
+            }
+    
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $(".imgInp").change(function(){
+        readURL(this);
+    });
+    
+   // function clear(img_id) {
+   //      $('#img_'+i).attr('src', "http://oceancouncil.org/wp-content/themes/maxcanvas_child/img/placeholder.png");
+   //      $('#img_clear_'+i).attr("style", "visibility: hidden;");
+   //  };
+    
+</script>
 
 <!--// <script>-->
 <!--//     $('.selectpicker').selectpicker('val', {{ selected_tag_names|safe }} );-->

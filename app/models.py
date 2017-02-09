@@ -42,6 +42,9 @@ class Post(db.Model):
         self.country = country
         self.created_by = user_id
 
+    def get_location(self):
+        return self.city + ", " + self.region + ", " + self.country
+
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('User.id')),
