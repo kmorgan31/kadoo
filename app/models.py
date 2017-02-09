@@ -56,14 +56,10 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(10))
     
-    bio = db.Column(db.String(500))
     city = db.Column(db.String(250))
     region = db.Column(db.String(250))
     country = db.Column(db.String(250))
     img_path = db.Column(db.String(500))
-    twitter_url = db.Column(db.String(200))
-    gplus_url = db.Column(db.String(200))
-    fbk_url = db.Column(db.String(200))
     
     posts = db.relationship('Post', backref='user_posts',lazy='dynamic')
     bookmarks = db.relationship('Post', secondary=bookmarks_relationship, backref='user_bookmarks', lazy='dynamic')
@@ -79,11 +75,7 @@ class User(db.Model):
         self.username = username
         self.email = email
         self.password = password
-        self.bio = "Tell me about yourself"
         self.img_path = "avatar.png"
-        self.twitter_url = ""
-        self.gplus_url = ""
-        self.fbk_url = ""
         self.city = city
         self.region = region
         self.country = country
@@ -111,10 +103,10 @@ class User(db.Model):
     
     def num_followers(self):
         return self.followed.filter(followers.c.follower_id == self.id).count()
-        
+    
+    #Posts    
     def num_posts(self):
         return self.posts.filter(Post.created_by == self.id).count()
-        
 
     #Bookmarks
     def bookmark(self, post):
